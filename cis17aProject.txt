@@ -1,0 +1,327 @@
+//The Coffee Breakers
+//Azucena Aparicio
+//Emmanuel Saucedo
+//CIS1a Project 1
+
+#include <iostream>
+#include <vector>
+#include <iomanip>
+#include <fstream>
+#include <cctype>
+#include <string>
+using namespace std;
+
+void getNumber(int *);
+void doubleValue(int *);
+
+
+void showTime(int);//function to calculate wait time diplayed
+
+void showTotal(double); //showTotal function prototype
+
+const int COLS = 3;
+const int tbl1_rows=1;
+const int tbl2_rows=1;
+
+void showArray(const double[][COLS], int); //array for prices
+
+void selectionSort(vector<string>&); //sorting array
+void swap(string &, string &);
+int binarySearch(const vector<string>&, string);
+
+
+  int main() {
+    
+    
+  string menuChoice;
+  string temp;
+  int size;
+  string sizeChoice;
+  double coffeePrice = 2.75;
+  double teaPrice = 2.50;
+  double price;
+  int qty;
+  double total;
+  string name;
+  int request;
+  string requestDetails;
+  int waitTime;
+  
+  //registration
+  cout << "Please register below to continue\n";
+  cout << "Name: ";
+  getline(cin, name);
+
+  cout << "\nHello, " << name << "!\n\n";
+  cout << "Welcome to our online ordering service.\n\n";
+
+/*
+  cout << "Please enter letters only\nName: ";
+  cin >> name;
+*/
+   
+
+//Vector for menu items display
+
+string searchValue;
+int position;
+
+vector<string> menuItems{ "Iced Coffee", "Hot Coffee", "Iced Tea", "Hot Tea"};
+
+selectionSort(menuItems); //sort the vector
+
+cout << "Here are our menu Items:\n";
+for(auto element: menuItems)
+cout << element << endl;
+cout << endl;
+
+
+// array & table for price menu
+  {
+  
+double table1[tbl1_rows][COLS] = {2.75, 3.00, 3.25};
+double table2[tbl2_rows][COLS] = {2.50, 2.75, 3.00};
+  
+cout << "Our coffee is priced as follows: "<<fixed<<showpoint<<setprecision(2);
+  
+showArray(table1, tbl1_rows);
+ cout<<"Our tea is priced as follows: "<<fixed<<showpoint<<setprecision(2);
+  
+showArray(table2, tbl2_rows);
+cout<<endl;
+
+} //end array/ table for price menu
+
+cout << "You can select from sizes small, medium or large.\n";
+cout<<endl;
+
+
+  cout <<"Would you like to order coffee or tea?\n";
+  cout << "1) Coffee\n";
+  cout << "2) Tea\n";
+  cin >> menuChoice;
+  
+  //input validation
+  while(menuChoice != "1" && menuChoice != "2")
+  {
+    cout << "That is not a valid option. Please try again.\n";
+    cin >> menuChoice;
+  }
+ 
+  if(menuChoice == "1")
+  {
+    menuChoice = "Coffee";
+    price = coffeePrice; //sets price to coffee price if 1 is selected
+  }
+  else if (menuChoice == "2")
+  {
+    menuChoice = "Tea";
+    price = teaPrice; //sets price to tea price if 2 is selected
+  }
+  
+  cout << menuChoice << "\n\n";
+  
+  cout << "Would you like your beverage to be HOT or ICED?\n";
+  cout << "1) Hot\n";
+  cout << "2) Iced\n";
+  cin >> temp;
+  
+  //input validation. only 1 or 2 allowed
+  while(temp != "1" && temp != "2")
+  {
+    cout << "That is not a valid option. Please try again.\n";
+    cin >> temp;
+  }
+  if(temp == "1")
+  {
+    temp = "Hot";
+  }
+  else if(temp == "2")
+  {
+    temp = "Iced";
+  }
+  
+  cout << temp << "\n\n";
+  
+  cout << "Choose a size for your drink: \n";
+  cout << "1) Small\n";
+  cout << "2) Medium\n";
+  cout << "3) Large\n";
+  cin >> size;
+  
+   while (size<1||size>3)
+   {
+  cout << "Please select a valid entry.\n";
+  cin >> size;
+   }
+
+  switch(size)
+  {
+    case 1: cout<< "SMALL\n\n";
+    sizeChoice = "Small";
+    break;
+    case 2: cout << "MEDIUM\n\n";
+    sizeChoice = "Medium";
+    price = (price + .25); //increases price by 25 cents if medium is selected
+    break;
+    case 3: cout << "LARGE\n\n";
+    sizeChoice = "Large";
+    price = (price + .50); //increases price by 50 cents if large is selected
+    break;
+  }
+ 
+  //pointer used as parameter
+  
+  int number;
+    
+    getNumber(&number);
+    doubleValue(&number);
+    
+    cout << "qty = " << number << "\n\n";
+    //end pointer used as parameter
+    
+  qty = number;
+ 
+  cout << "Do you have any special requests for our barista?\n";
+  cout << "1) Yes\n";
+  cout << "2) No\n";
+  
+  cin >> request;
+  
+  if(request == 1)
+  {
+    cout << "Please explain:\n";
+    cin >> requestDetails;
+    getline(cin, requestDetails);
+    
+    cout << "\n All done!\n\n";
+  }
+  else if (request == 2)
+  {
+    requestDetails = "NONE\n";
+    cout << "All done!\n\n";
+  }
+  
+ 
+ //BILL
+   cout << "*****************************\n";
+  cout << "     YOUR ORDER SUMMARY : \n";
+  cout << 
+    "*****************************\n\n";
+    
+    cout << "Order for: " << name << "\n\n" 
+    << "(" << qty << ")" << " " << sizeChoice << " " 
+    << temp << " " << menuChoice << "\n\n";
+    total = price * qty;
+    
+  showTotal(total); // showTotal() function call
+  
+  
+  cout << "\nSpecial instructions: " << requestDetails << "\n" ;
+  
+  cout << "       ~•~•~•~•~•~•~•~           ";
+  
+  if (qty < 3)
+    waitTime = 10;
+    else if (qty > 3 && qty < 7)
+    waitTime = 15;
+    else if (qty > 7 && qty > 15)
+    waitTime = 40;
+    else if (qty > 15)
+    waitTime = 60;
+    
+    showTime(waitTime);
+    
+  cout << "*****************************";
+  
+
+  //OUTPUTS TO FILE  
+  ofstream myfile; 
+    myfile.open("OrderSummary.txt");
+    myfile << name << qty << " " << temp << " " << menuChoice << " ...... " 
+            << fixed << showpoint << setprecision(2) << total << "SPECIAL REQUEST: " << requestDetails;
+    myfile.close(); //closes file
+ 
+ 
+  return 0;
+}
+
+void showArray(const double numbers [][COLS], int rows)
+
+{
+  
+   for (int x=0; x<rows; x++)
+  
+   {
+    
+    for (int y=0; y<COLS; y++)
+    
+    {
+      
+     cout<<setw(4)<<numbers[x][y]<<" ";
+    
+    }
+    
+    cout<<endl;
+  
+   }
+
+}
+
+//function header for showTotal()
+void showTotal(double total)
+{
+cout << "Total: $" << fixed << showpoint << setprecision(2) << total;
+}
+
+//sorts a menuItems vector in ascending order
+void selectionSort(vector<string> &v)
+{
+  int minIndex;
+  string minValue;
+  
+  for (int start = 0; start < (v.size() - 1); start++)
+  {
+    minIndex = start;
+    minValue = v[start];
+    for(int index = start + 1; index < v.size(); index++)
+    {
+      if (v[index] < minValue)
+      {
+        minValue = v[index];
+        minIndex = index;
+      }
+      
+    }
+    swap(v[minIndex], v[start]);
+  }
+}
+
+void showTime(int waitTime)
+{
+  
+    
+  cout << "\n  Your order will be ready for\n   pick up in " << waitTime << " minutes!\n            ENJOY!\n";
+  
+}
+
+void getNumber(int *input)
+{
+  cout << "Now, enter The quantity of the item you have added that you would like: \n";
+  cin >> *input;
+  
+}
+
+void doubleValue(int *val)
+{
+  *val *= 1;
+  
+}
+
+//The swap function swaps a and b in memory
+void swap(string &a, string &b)
+{
+  string temp = a;
+  a =b;
+  b = temp;
+}
