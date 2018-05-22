@@ -32,7 +32,7 @@ int binarySearch(const vector<string>&, string);
 
   int main() {
     
-    
+  bool isLetter(string);  
   string menuChoice;
   string temp;
   int size;
@@ -52,15 +52,15 @@ int binarySearch(const vector<string>&, string);
   cout << "Name: ";
   getline(cin, name);
 
+  if(isLetter(name))
+  {
+    getline(cin, name);
+  }
+
   cout << "\nHello, " << name << "!\n\n";
   cout << "Welcome to our online ordering service.\n\n";
 
-/*
-  cout << "Please enter letters only\nName: ";
-  cin >> name;
-*/
-   
-
+  
 //Vector for menu items display
 
 string searchValue;
@@ -221,11 +221,11 @@ cout<<endl;
   
   cout << "       ~•~•~•~•~•~•~•~           ";
   
-  if (qty < 3)
+  if (qty <= 3)
     waitTime = 10;
-    else if (qty > 3 && qty < 7)
+    else if (qty > 3 && qty <= 7)
     waitTime = 15;
-    else if (qty > 7 && qty > 15)
+    else if (qty > 7 && qty >= 15)
     waitTime = 40;
     else if (qty > 15)
     waitTime = 60;
@@ -247,23 +247,18 @@ cout<<endl;
 }
 
 void showArray(const double numbers [][COLS], int rows)
-
 {
   
    for (int x=0; x<rows; x++)
-  
    {
     
     for (int y=0; y<COLS; y++)
-    
     {
-      
      cout<<setw(4)<<numbers[x][y]<<" ";
     
     }
-    
+
     cout<<endl;
-  
    }
 
 }
@@ -291,31 +286,38 @@ void selectionSort(vector<string> &v)
         minValue = v[index];
         minIndex = index;
       }
-      
     }
     swap(v[minIndex], v[start]);
   }
 }
+bool isLetter(string name)
+{
+	for(int i = 0; i < name.length(); i++)
+	{
+		if(! (name[i] >= '0' && name[i] <= '9' || name[i] == ' ') ) return false;
+		{
+			cout << "Please use letters only for this registration..\n";
+      cout << "Name: ";
+		}
+
+		return true;
+	}
+}
 
 void showTime(int waitTime)
 {
-  
-    
   cout << "\n  Your order will be ready for\n   pick up in " << waitTime << " minutes!\n            ENJOY!\n";
-  
 }
 
 void getNumber(int *input)
 {
   cout << "Now, enter The quantity of the item you have added that you would like: \n";
   cin >> *input;
-  
 }
 
 void doubleValue(int *val)
 {
   *val *= 1;
-  
 }
 
 //The swap function swaps a and b in memory
